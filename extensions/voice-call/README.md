@@ -1,6 +1,6 @@
-# @openclaw/voice-call
+# @bobolt/voice-call
 
-Official Voice Call plugin for **OpenClaw**.
+Official Voice Call plugin for **Bobolt**.
 
 Providers:
 
@@ -9,15 +9,15 @@ Providers:
 - **Plivo** (Voice API + XML transfer + GetInput speech)
 - **Mock** (dev/no network)
 
-Docs: `https://docs.openclaw.ai/plugins/voice-call`
-Plugin system: `https://docs.openclaw.ai/plugin`
+Docs: `https://docs.bobolt.ai/plugins/voice-call`
+Plugin system: `https://docs.bobolt.ai/plugin`
 
 ## Install (local dev)
 
-### Option A: install via OpenClaw (recommended)
+### Option A: install via Bobolt (recommended)
 
 ```bash
-openclaw plugins install @openclaw/voice-call
+bobolt plugins install @bobolt/voice-call
 ```
 
 Restart the Gateway afterwards.
@@ -25,9 +25,9 @@ Restart the Gateway afterwards.
 ### Option B: copy into your global extensions folder (dev)
 
 ```bash
-mkdir -p ~/.openclaw/extensions
-cp -R extensions/voice-call ~/.openclaw/extensions/voice-call
-cd ~/.openclaw/extensions/voice-call && pnpm install
+mkdir -p ~/.bobolt/extensions
+cp -R extensions/voice-call ~/.bobolt/extensions/voice-call
+cd ~/.bobolt/extensions/voice-call && pnpm install
 ```
 
 ## Config
@@ -103,13 +103,13 @@ Notes:
 ## CLI
 
 ```bash
-openclaw voicecall call --to "+15555550123" --message "Hello from OpenClaw"
-openclaw voicecall continue --call-id <id> --message "Any questions?"
-openclaw voicecall speak --call-id <id> --message "One moment"
-openclaw voicecall end --call-id <id>
-openclaw voicecall status --call-id <id>
-openclaw voicecall tail
-openclaw voicecall expose --mode funnel
+bobolt voicecall call --to "+15555550123" --message "Hello from Bobolt"
+bobolt voicecall continue --call-id <id> --message "Any questions?"
+bobolt voicecall speak --call-id <id> --message "One moment"
+bobolt voicecall end --call-id <id>
+bobolt voicecall status --call-id <id>
+bobolt voicecall tail
+bobolt voicecall expose --mode funnel
 ```
 
 ## Tool

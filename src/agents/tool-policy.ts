@@ -36,8 +36,8 @@ export const TOOL_GROUPS: Record<string, string[]> = {
   "group:messaging": ["message"],
   // Nodes + device tools
   "group:nodes": ["nodes"],
-  // All OpenClaw native tools (excludes provider plugins).
-  "group:openclaw": [
+  // All Bobolt native tools (excludes provider plugins).
+  "group:bobolt": [
     "browser",
     "canvas",
     "nodes",

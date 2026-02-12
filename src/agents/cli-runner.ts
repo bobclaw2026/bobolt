@@ -1,6 +1,6 @@
 import type { ImageContent } from "@mariozechner/pi-ai";
 import type { ThinkLevel } from "../auto-reply/thinking.js";
-import type { OpenClawConfig } from "../config/config.js";
+import type { BoboltConfig } from "../config/config.js";
 import type { EmbeddedPiRunResult } from "./pi-embedded-runner.js";
 import { resolveHeartbeatPrompt } from "../auto-reply/heartbeat.js";
 import { shouldLogVerbose } from "../globals.js";
@@ -25,7 +25,7 @@ import {
   resolveSystemPromptUsage,
   writeCliImages,
 } from "./cli-runner/helpers.js";
-import { resolveOpenClawDocsPath } from "./docs-path.js";
+import { resolveBoboltDocsPath } from "./docs-path.js";
 import { FailoverError, resolveFailoverStatus } from "./failover-error.js";
 import { classifyFailoverReason, isFailoverErrorMessage } from "./pi-embedded-helpers.js";
 import { redactRunIdentifier, resolveRunWorkspaceDir } from "./workspace-run.js";
@@ -38,7 +38,7 @@ export async function runCliAgent(params: {
   agentId?: string;
   sessionFile: string;
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: BoboltConfig;
   prompt: string;
   provider: string;
   model?: string;
@@ -101,7 +101,7 @@ export async function runCliAgent(params: {
     sessionAgentId === defaultAgentId
       ? resolveHeartbeatPrompt(params.config?.agents?.defaults?.heartbeat?.prompt)
       : undefined;
-  const docsPath = await resolveOpenClawDocsPath({
+  const docsPath = await resolveBoboltDocsPath({
     workspaceDir,
     argv1: process.argv[1],
     cwd: process.cwd(),
@@ -329,7 +329,7 @@ export async function runClaudeCliAgent(params: {
   agentId?: string;
   sessionFile: string;
   workspaceDir: string;
-  config?: OpenClawConfig;
+  config?: BoboltConfig;
   prompt: string;
   provider?: string;
   model?: string;

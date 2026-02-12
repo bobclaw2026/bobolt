@@ -24,10 +24,10 @@ describe("onboard (non-interactive): token auth", () => {
     delete process.env.OPENCLAW_GATEWAY_TOKEN;
     delete process.env.OPENCLAW_GATEWAY_PASSWORD;
 
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-onboard-token-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-onboard-token-"));
     process.env.HOME = tempHome;
     process.env.OPENCLAW_STATE_DIR = tempHome;
-    process.env.OPENCLAW_CONFIG_PATH = path.join(tempHome, "openclaw.json");
+    process.env.OPENCLAW_CONFIG_PATH = path.join(tempHome, "bobolt.json");
     vi.resetModules();
 
     const cleanToken = `sk-ant-oat01-${"a".repeat(80)}`;

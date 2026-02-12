@@ -26,7 +26,7 @@ beforeEach(() => {
 
   readConfigFileSnapshot.mockReset();
   writeConfigFile.mockReset().mockResolvedValue(undefined);
-  resolveOpenClawPackageRoot.mockReset().mockResolvedValue(null);
+  resolveBoboltPackageRoot.mockReset().mockResolvedValue(null);
   runGatewayUpdate.mockReset().mockResolvedValue({
     status: "skipped",
     mode: "unknown",
@@ -34,7 +34,7 @@ beforeEach(() => {
     durationMs: 0,
   });
   legacyReadConfigFileSnapshot.mockReset().mockResolvedValue({
-    path: "/tmp/openclaw.json",
+    path: "/tmp/bobolt.json",
     exists: false,
     raw: null,
     parsed: {},
@@ -78,7 +78,7 @@ beforeEach(() => {
   originalStateDir = process.env.OPENCLAW_STATE_DIR;
   originalUpdateInProgress = process.env.OPENCLAW_UPDATE_IN_PROGRESS;
   process.env.OPENCLAW_UPDATE_IN_PROGRESS = "1";
-  tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-doctor-state-"));
+  tempStateDir = fs.mkdtempSync(path.join(os.tmpdir(), "bobolt-doctor-state-"));
   process.env.OPENCLAW_STATE_DIR = tempStateDir;
   fs.mkdirSync(path.join(tempStateDir, "agents", "main", "sessions"), {
     recursive: true,
@@ -109,7 +109,7 @@ const confirm = vi.fn().mockResolvedValue(true);
 const select = vi.fn().mockResolvedValue("node");
 const note = vi.fn();
 const writeConfigFile = vi.fn().mockResolvedValue(undefined);
-const resolveOpenClawPackageRoot = vi.fn().mockResolvedValue(null);
+const resolveBoboltPackageRoot = vi.fn().mockResolvedValue(null);
 const runGatewayUpdate = vi.fn().mockResolvedValue({
   status: "skipped",
   mode: "unknown",
@@ -133,7 +133,7 @@ const runCommandWithTimeout = vi.fn().mockResolvedValue({
 const ensureAuthProfileStore = vi.fn().mockReturnValue({ version: 1, profiles: {} });
 
 const legacyReadConfigFileSnapshot = vi.fn().mockResolvedValue({
-  path: "/tmp/openclaw.json",
+  path: "/tmp/bobolt.json",
   exists: false,
   raw: null,
   parsed: {},
@@ -173,14 +173,14 @@ vi.mock("../agents/skills-status.js", () => ({
 }));
 
 vi.mock("../plugins/loader.js", () => ({
-  loadOpenClawPlugins: () => ({ plugins: [], diagnostics: [] }),
+  loadBoboltPlugins: () => ({ plugins: [], diagnostics: [] }),
 }));
 
 vi.mock("../config/config.js", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    CONFIG_PATH: "/tmp/openclaw.json",
+    CONFIG_PATH: "/tmp/bobolt.json",
     createConfigIO,
     readConfigFileSnapshot,
     writeConfigFile,
@@ -215,8 +215,8 @@ vi.mock("../process/exec.js", () => ({
   runCommandWithTimeout,
 }));
 
-vi.mock("../infra/openclaw-root.js", () => ({
-  resolveOpenClawPackageRoot,
+vi.mock("../infra/bobolt-root.js", () => ({
+  resolveBoboltPackageRoot,
 }));
 
 vi.mock("../infra/update-runner.js", () => ({
@@ -332,7 +332,7 @@ vi.mock("./doctor-update.js", () => ({
 describe("doctor command", () => {
   it("warns when the state directory is missing", async () => {
     readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/bobolt.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -342,7 +342,7 @@ describe("doctor command", () => {
       legacyIssues: [],
     });
 
-    const missingDir = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-missing-state-"));
+    const missingDir = fs.mkdtempSync(path.join(os.tmpdir(), "bobolt-missing-state-"));
     fs.rmSync(missingDir, { recursive: true, force: true });
     process.env.OPENCLAW_STATE_DIR = missingDir;
     note.mockClear();
@@ -360,7 +360,7 @@ describe("doctor command", () => {
 
   it("warns about opencode provider overrides", async () => {
     readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/bobolt.json",
       exists: true,
       raw: "{}",
       parsed: {},
@@ -394,7 +394,7 @@ describe("doctor command", () => {
 
   it("skips gateway auth warning when OPENCLAW_GATEWAY_TOKEN is set", async () => {
     readConfigFileSnapshot.mockResolvedValue({
-      path: "/tmp/openclaw.json",
+      path: "/tmp/bobolt.json",
       exists: true,
       raw: "{}",
       parsed: {},

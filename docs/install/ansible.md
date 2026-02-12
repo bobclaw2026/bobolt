@@ -1,5 +1,5 @@
 ---
-summary: "Automated, hardened OpenClaw installation with Ansible, Tailscale VPN, and firewall isolation"
+summary: "Automated, hardened Bobolt installation with Ansible, Tailscale VPN, and firewall isolation"
 read_when:
   - You want automated server deployment with security hardening
   - You need firewall-isolated setup with VPN access
@@ -9,19 +9,19 @@ title: "Ansible"
 
 # Ansible Installation
 
-The recommended way to deploy OpenClaw to production servers is via **[openclaw-ansible](https://github.com/openclaw/openclaw-ansible)** — an automated installer with security-first architecture.
+The recommended way to deploy Bobolt to production servers is via **[bobolt-ansible](https://github.com/bobolt/bobolt-ansible)** — an automated installer with security-first architecture.
 
 ## Quick Start
 
 One-command install:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/openclaw/openclaw-ansible/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bobolt/bobolt-ansible/main/install.sh | bash
 ```
 
-> **📦 Full guide: [github.com/openclaw/openclaw-ansible](https://github.com/openclaw/openclaw-ansible)**
+> **📦 Full guide: [github.com/bobolt/bobolt-ansible](https://github.com/bobolt/bobolt-ansible)**
 >
-> The openclaw-ansible repo is the source of truth for Ansible deployment. This page is a quick overview.
+> The bobolt-ansible repo is the source of truth for Ansible deployment. This page is a quick overview.
 
 ## What You Get
 
@@ -47,22 +47,22 @@ The Ansible playbook installs and configures:
 2. **UFW firewall** (SSH + Tailscale ports only)
 3. **Docker CE + Compose V2** (for agent sandboxes)
 4. **Node.js 22.x + pnpm** (runtime dependencies)
-5. **OpenClaw** (host-based, not containerized)
+5. **Bobolt** (host-based, not containerized)
 6. **Systemd service** (auto-start with security hardening)
 
 Note: The gateway runs **directly on the host** (not in Docker), but agent sandboxes use Docker for isolation. See [Sandboxing](/gateway/sandboxing) for details.
 
 ## Post-Install Setup
 
-After installation completes, switch to the openclaw user:
+After installation completes, switch to the bobolt user:
 
 ```bash
-sudo -i -u openclaw
+sudo -i -u bobolt
 ```
 
 The post-install script will guide you through:
 
-1. **Onboarding wizard**: Configure OpenClaw settings
+1. **Onboarding wizard**: Configure Bobolt settings
 2. **Provider login**: Connect WhatsApp/Telegram/Discord/Signal
 3. **Gateway testing**: Verify the installation
 4. **Tailscale setup**: Connect to your VPN mesh
@@ -71,17 +71,17 @@ The post-install script will guide you through:
 
 ```bash
 # Check service status
-sudo systemctl status openclaw
+sudo systemctl status bobolt
 
 # View live logs
-sudo journalctl -u openclaw -f
+sudo journalctl -u bobolt -f
 
 # Restart gateway
-sudo systemctl restart openclaw
+sudo systemctl restart bobolt
 
-# Provider login (run as openclaw user)
-sudo -i -u openclaw
-openclaw channels login
+# Provider login (run as bobolt user)
+sudo -i -u bobolt
+bobolt channels login
 ```
 
 ## Security Architecture
@@ -118,8 +118,8 @@ If you prefer manual control over the automation:
 sudo apt update && sudo apt install -y ansible git
 
 # 2. Clone repository
-git clone https://github.com/openclaw/openclaw-ansible.git
-cd openclaw-ansible
+git clone https://github.com/bobolt/bobolt-ansible.git
+cd bobolt-ansible
 
 # 3. Install Ansible collections
 ansible-galaxy collection install -r requirements.yml
@@ -127,18 +127,18 @@ ansible-galaxy collection install -r requirements.yml
 # 4. Run playbook
 ./run-playbook.sh
 
-# Or run directly (then manually execute /tmp/openclaw-setup.sh after)
+# Or run directly (then manually execute /tmp/bobolt-setup.sh after)
 # ansible-playbook playbook.yml --ask-become-pass
 ```
 
-## Updating OpenClaw
+## Updating Bobolt
 
-The Ansible installer sets up OpenClaw for manual updates. See [Updating](/install/updating) for the standard update flow.
+The Ansible installer sets up Bobolt for manual updates. See [Updating](/install/updating) for the standard update flow.
 
 To re-run the Ansible playbook (e.g., for configuration changes):
 
 ```bash
-cd openclaw-ansible
+cd bobolt-ansible
 ./run-playbook.sh
 ```
 
@@ -158,14 +158,14 @@ If you're locked out:
 
 ```bash
 # Check logs
-sudo journalctl -u openclaw -n 100
+sudo journalctl -u bobolt -n 100
 
 # Verify permissions
-sudo ls -la /opt/openclaw
+sudo ls -la /opt/bobolt
 
 # Test manual start
-sudo -i -u openclaw
-cd ~/openclaw
+sudo -i -u bobolt
+cd ~/bobolt
 pnpm start
 ```
 
@@ -176,33 +176,33 @@ pnpm start
 sudo systemctl status docker
 
 # Check sandbox image
-sudo docker images | grep openclaw-sandbox
+sudo docker images | grep bobolt-sandbox
 
 # Build sandbox image if missing
-cd /opt/openclaw/openclaw
-sudo -u openclaw ./scripts/sandbox-setup.sh
+cd /opt/bobolt/bobolt
+sudo -u bobolt ./scripts/sandbox-setup.sh
 ```
 
 ### Provider login fails
 
-Make sure you're running as the `openclaw` user:
+Make sure you're running as the `bobolt` user:
 
 ```bash
-sudo -i -u openclaw
-openclaw channels login
+sudo -i -u bobolt
+bobolt channels login
 ```
 
 ## Advanced Configuration
 
 For detailed security architecture and troubleshooting:
 
-- [Security Architecture](https://github.com/openclaw/openclaw-ansible/blob/main/docs/security.md)
-- [Technical Details](https://github.com/openclaw/openclaw-ansible/blob/main/docs/architecture.md)
-- [Troubleshooting Guide](https://github.com/openclaw/openclaw-ansible/blob/main/docs/troubleshooting.md)
+- [Security Architecture](https://github.com/bobolt/bobolt-ansible/blob/main/docs/security.md)
+- [Technical Details](https://github.com/bobolt/bobolt-ansible/blob/main/docs/architecture.md)
+- [Troubleshooting Guide](https://github.com/bobolt/bobolt-ansible/blob/main/docs/troubleshooting.md)
 
 ## Related
 
-- [openclaw-ansible](https://github.com/openclaw/openclaw-ansible) — full deployment guide
+- [bobolt-ansible](https://github.com/bobolt/bobolt-ansible) — full deployment guide
 - [Docker](/install/docker) — containerized gateway setup
 - [Sandboxing](/gateway/sandboxing) — agent sandbox configuration
 - [Multi-Agent Sandbox & Tools](/tools/multi-agent-sandbox-tools) — per-agent isolation

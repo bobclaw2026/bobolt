@@ -40,12 +40,12 @@ function isDisabledByEnv() {
 
 function safeServiceName(name: string) {
   const trimmed = name.trim();
-  return trimmed.length > 0 ? trimmed : "OpenClaw";
+  return trimmed.length > 0 ? trimmed : "Bobolt";
 }
 
 function prettifyInstanceName(name: string) {
   const normalized = name.trim().replace(/\s+/g, " ");
-  return normalized.replace(/\s+\(OpenClaw\)\s*$/i, "").trim() || normalized;
+  return normalized.replace(/\s+\(Bobolt\)\s*$/i, "").trim() || normalized;
 }
 
 type BonjourService = {
@@ -97,16 +97,16 @@ export async function startGatewayBonjourAdvertiser(
   const hostnameRaw =
     process.env.OPENCLAW_MDNS_HOSTNAME?.trim() ||
     process.env.CLAWDBOT_MDNS_HOSTNAME?.trim() ||
-    "openclaw";
+    "bobolt";
   const hostname =
     hostnameRaw
       .replace(/\.local$/i, "")
       .split(".")[0]
-      .trim() || "openclaw";
+      .trim() || "bobolt";
   const instanceName =
     typeof opts.instanceName === "string" && opts.instanceName.trim()
       ? opts.instanceName.trim()
-      : `${hostname} (OpenClaw)`;
+      : `${hostname} (Bobolt)`;
   const displayName = prettifyInstanceName(instanceName);
 
   const txtBase: Record<string, string> = {
@@ -147,7 +147,7 @@ export async function startGatewayBonjourAdvertiser(
 
   const gateway = responder.createService({
     name: safeServiceName(instanceName),
-    type: "openclaw-gw",
+    type: "bobolt-gw",
     protocol: Protocol.TCP,
     port: opts.gatewayPort,
     domain: "local",

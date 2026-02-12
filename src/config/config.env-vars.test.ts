@@ -7,10 +7,10 @@ import { withEnvOverride, withTempHome } from "./test-helpers.js";
 describe("config env vars", () => {
   it("applies env vars from env block when missing", async () => {
     await withTempHome(async (home) => {
-      const configDir = path.join(home, ".openclaw");
+      const configDir = path.join(home, ".bobolt");
       await fs.mkdir(configDir, { recursive: true });
       await fs.writeFile(
-        path.join(configDir, "openclaw.json"),
+        path.join(configDir, "bobolt.json"),
         JSON.stringify(
           {
             env: { vars: { OPENROUTER_API_KEY: "config-key" } },
@@ -31,10 +31,10 @@ describe("config env vars", () => {
 
   it("does not override existing env vars", async () => {
     await withTempHome(async (home) => {
-      const configDir = path.join(home, ".openclaw");
+      const configDir = path.join(home, ".bobolt");
       await fs.mkdir(configDir, { recursive: true });
       await fs.writeFile(
-        path.join(configDir, "openclaw.json"),
+        path.join(configDir, "bobolt.json"),
         JSON.stringify(
           {
             env: { vars: { OPENROUTER_API_KEY: "config-key" } },
@@ -55,10 +55,10 @@ describe("config env vars", () => {
 
   it("applies env vars from env.vars when missing", async () => {
     await withTempHome(async (home) => {
-      const configDir = path.join(home, ".openclaw");
+      const configDir = path.join(home, ".bobolt");
       await fs.mkdir(configDir, { recursive: true });
       await fs.writeFile(
-        path.join(configDir, "openclaw.json"),
+        path.join(configDir, "bobolt.json"),
         JSON.stringify(
           {
             env: { vars: { GROQ_API_KEY: "gsk-config" } },
@@ -77,11 +77,11 @@ describe("config env vars", () => {
     });
   });
 
-  it("loads ${VAR} substitutions from ~/.openclaw/.env on repeated runtime loads", async () => {
+  it("loads ${VAR} substitutions from ~/.bobolt/.env on repeated runtime loads", async () => {
     await withTempHome(async (home) => {
       await withEnvOverride(
         {
-          OPENCLAW_STATE_DIR: path.join(home, ".openclaw"),
+          OPENCLAW_STATE_DIR: path.join(home, ".bobolt"),
           CLAWDBOT_STATE_DIR: undefined,
           OPENCLAW_HOME: undefined,
           CLAWDBOT_HOME: undefined,
@@ -92,7 +92,7 @@ describe("config env vars", () => {
           const configDir = resolveStateDir(process.env, () => home);
           await fs.mkdir(configDir, { recursive: true });
           await fs.writeFile(
-            path.join(configDir, "openclaw.json"),
+            path.join(configDir, "bobolt.json"),
             JSON.stringify(
               {
                 tools: {

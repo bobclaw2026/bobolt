@@ -1,4 +1,4 @@
-import type { PluginRuntime } from "openclaw/plugin-sdk";
+import type { PluginRuntime } from "bobolt/plugin-sdk";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -12,7 +12,7 @@ import { setNostrRuntime } from "./runtime.js";
 
 async function withTempStateDir<T>(fn: (dir: string) => Promise<T>) {
   const previous = process.env.OPENCLAW_STATE_DIR;
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-nostr-"));
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-nostr-"));
   process.env.OPENCLAW_STATE_DIR = dir;
   setNostrRuntime({
     state: {
@@ -21,7 +21,7 @@ async function withTempStateDir<T>(fn: (dir: string) => Promise<T>) {
         if (override) {
           return override;
         }
-        return path.join(homedir(), ".openclaw");
+        return path.join(homedir(), ".bobolt");
       },
     },
   } as PluginRuntime);

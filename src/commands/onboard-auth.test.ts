@@ -65,7 +65,7 @@ describe("writeOAuthCredentials", () => {
   });
 
   it("writes auth-profiles.json under OPENCLAW_AGENT_DIR when set", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-oauth-"));
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-oauth-"));
     process.env.OPENCLAW_STATE_DIR = tempStateDir;
     process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
     process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
@@ -124,7 +124,7 @@ describe("setMinimaxApiKey", () => {
   });
 
   it("writes to OPENCLAW_AGENT_DIR when set", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-minimax-"));
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-minimax-"));
     process.env.OPENCLAW_STATE_DIR = tempStateDir;
     process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "custom-agent");
     process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;

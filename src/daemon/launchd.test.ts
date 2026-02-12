@@ -19,7 +19,7 @@ async function withLaunchctlStub(
   const originalLogPath = process.env.OPENCLAW_TEST_LAUNCHCTL_LOG;
   const originalListOutput = process.env.OPENCLAW_TEST_LAUNCHCTL_LIST_OUTPUT;
 
-  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-launchctl-test-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-launchctl-test-"));
   try {
     const binDir = path.join(tmpDir, "bin");
     const homeDir = path.join(tmpDir, "home");
@@ -105,7 +105,7 @@ describe("launchd runtime parsing", () => {
 
 describe("launchctl list detection", () => {
   it("detects the resolved label in launchctl list", async () => {
-    await withLaunchctlStub({ listOutput: "123 0 ai.openclaw.gateway\n" }, async ({ env }) => {
+    await withLaunchctlStub({ listOutput: "123 0 ai.bobolt.gateway\n" }, async ({ env }) => {
       const listed = await isLaunchAgentListed({ env });
       expect(listed).toBe(true);
     });
@@ -131,7 +131,7 @@ describe("launchd bootstrap repair", () => {
         .map((line) => JSON.parse(line) as string[]);
 
       const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
-      const label = "ai.openclaw.gateway";
+      const label = "ai.bobolt.gateway";
       const plistPath = resolveLaunchAgentPlistPath(env);
 
       expect(calls).toContainEqual(["bootstrap", domain, plistPath]);
@@ -145,7 +145,7 @@ describe("launchd install", () => {
     const originalPath = process.env.PATH;
     const originalLogPath = process.env.OPENCLAW_TEST_LAUNCHCTL_LOG;
 
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-launchctl-test-"));
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-launchctl-test-"));
     try {
       const binDir = path.join(tmpDir, "bin");
       const homeDir = path.join(tmpDir, "home");
@@ -199,7 +199,7 @@ describe("launchd install", () => {
         .map((line) => JSON.parse(line) as string[]);
 
       const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
-      const label = "ai.openclaw.gateway";
+      const label = "ai.bobolt.gateway";
       const plistPath = resolveLaunchAgentPlistPath(env);
       const serviceId = `${domain}/${label}`;
 
@@ -229,21 +229,21 @@ describe("resolveLaunchAgentPlistPath", () => {
   it("uses default label when OPENCLAW_PROFILE is default", () => {
     const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "default" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.gateway.plist",
     );
   });
 
   it("uses default label when OPENCLAW_PROFILE is unset", () => {
     const env = { HOME: "/Users/test" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.gateway.plist",
     );
   });
 
   it("uses profile-specific label when OPENCLAW_PROFILE is set to a custom value", () => {
     const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "jbphoenix" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.jbphoenix.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.jbphoenix.plist",
     );
   });
 
@@ -275,28 +275,28 @@ describe("resolveLaunchAgentPlistPath", () => {
       OPENCLAW_LAUNCHD_LABEL: "   ",
     };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.myprofile.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.myprofile.plist",
     );
   });
 
   it("handles case-insensitive 'Default' profile", () => {
     const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "Default" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.gateway.plist",
     );
   });
 
   it("handles case-insensitive 'DEFAULT' profile", () => {
     const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "DEFAULT" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.gateway.plist",
     );
   });
 
   it("trims whitespace from OPENCLAW_PROFILE", () => {
     const env = { HOME: "/Users/test", OPENCLAW_PROFILE: "  myprofile  " };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ai.openclaw.myprofile.plist",
+      "/Users/test/Library/LaunchAgents/ai.bobolt.myprofile.plist",
     );
   });
 });

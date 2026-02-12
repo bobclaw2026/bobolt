@@ -46,27 +46,27 @@ describe("state + config path candidates", () => {
 
   it("uses OPENCLAW_HOME for default state/config locations", () => {
     const env = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      OPENCLAW_HOME: "/srv/bobolt-home",
     } as NodeJS.ProcessEnv;
 
-    const resolvedHome = path.resolve("/srv/openclaw-home");
-    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".openclaw"));
+    const resolvedHome = path.resolve("/srv/bobolt-home");
+    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".bobolt"));
 
     const candidates = resolveDefaultConfigCandidates(env);
-    expect(candidates[0]).toBe(path.join(resolvedHome, ".openclaw", "openclaw.json"));
+    expect(candidates[0]).toBe(path.join(resolvedHome, ".bobolt", "bobolt.json"));
   });
 
   it("prefers OPENCLAW_HOME over HOME for default state/config locations", () => {
     const env = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      OPENCLAW_HOME: "/srv/bobolt-home",
       HOME: "/home/other",
     } as NodeJS.ProcessEnv;
 
-    const resolvedHome = path.resolve("/srv/openclaw-home");
-    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".openclaw"));
+    const resolvedHome = path.resolve("/srv/bobolt-home");
+    expect(resolveStateDir(env)).toBe(path.join(resolvedHome, ".bobolt"));
 
     const candidates = resolveDefaultConfigCandidates(env);
-    expect(candidates[0]).toBe(path.join(resolvedHome, ".openclaw", "openclaw.json"));
+    expect(candidates[0]).toBe(path.join(resolvedHome, ".bobolt", "bobolt.json"));
   });
 
   it("orders default config candidates in a stable order", () => {
@@ -74,19 +74,19 @@ describe("state + config path candidates", () => {
     const resolvedHome = path.resolve(home);
     const candidates = resolveDefaultConfigCandidates({} as NodeJS.ProcessEnv, () => home);
     const expected = [
-      path.join(resolvedHome, ".openclaw", "openclaw.json"),
-      path.join(resolvedHome, ".openclaw", "clawdbot.json"),
-      path.join(resolvedHome, ".openclaw", "moltbot.json"),
-      path.join(resolvedHome, ".openclaw", "moldbot.json"),
-      path.join(resolvedHome, ".clawdbot", "openclaw.json"),
+      path.join(resolvedHome, ".bobolt", "bobolt.json"),
+      path.join(resolvedHome, ".bobolt", "clawdbot.json"),
+      path.join(resolvedHome, ".bobolt", "moltbot.json"),
+      path.join(resolvedHome, ".bobolt", "moldbot.json"),
+      path.join(resolvedHome, ".clawdbot", "bobolt.json"),
       path.join(resolvedHome, ".clawdbot", "clawdbot.json"),
       path.join(resolvedHome, ".clawdbot", "moltbot.json"),
       path.join(resolvedHome, ".clawdbot", "moldbot.json"),
-      path.join(resolvedHome, ".moltbot", "openclaw.json"),
+      path.join(resolvedHome, ".moltbot", "bobolt.json"),
       path.join(resolvedHome, ".moltbot", "clawdbot.json"),
       path.join(resolvedHome, ".moltbot", "moltbot.json"),
       path.join(resolvedHome, ".moltbot", "moldbot.json"),
-      path.join(resolvedHome, ".moldbot", "openclaw.json"),
+      path.join(resolvedHome, ".moldbot", "bobolt.json"),
       path.join(resolvedHome, ".moldbot", "clawdbot.json"),
       path.join(resolvedHome, ".moldbot", "moltbot.json"),
       path.join(resolvedHome, ".moldbot", "moldbot.json"),
@@ -94,10 +94,10 @@ describe("state + config path candidates", () => {
     expect(candidates).toEqual(expected);
   });
 
-  it("prefers ~/.openclaw when it exists and legacy dir is missing", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-state-"));
+  it("prefers ~/.bobolt when it exists and legacy dir is missing", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-state-"));
     try {
-      const newDir = path.join(root, ".openclaw");
+      const newDir = path.join(root, ".bobolt");
       await fs.mkdir(newDir, { recursive: true });
       const resolved = resolveStateDir({} as NodeJS.ProcessEnv, () => root);
       expect(resolved).toBe(newDir);
@@ -107,17 +107,17 @@ describe("state + config path candidates", () => {
   });
 
   it("CONFIG_PATH prefers existing config when present", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-config-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-config-"));
     const previousHome = process.env.HOME;
     const previousUserProfile = process.env.USERPROFILE;
     const previousHomeDrive = process.env.HOMEDRIVE;
     const previousHomePath = process.env.HOMEPATH;
-    const previousOpenClawConfig = process.env.OPENCLAW_CONFIG_PATH;
-    const previousOpenClawState = process.env.OPENCLAW_STATE_DIR;
+    const previousBoboltConfig = process.env.OPENCLAW_CONFIG_PATH;
+    const previousBoboltState = process.env.OPENCLAW_STATE_DIR;
     try {
-      const legacyDir = path.join(root, ".openclaw");
+      const legacyDir = path.join(root, ".bobolt");
       await fs.mkdir(legacyDir, { recursive: true });
-      const legacyPath = path.join(legacyDir, "openclaw.json");
+      const legacyPath = path.join(legacyDir, "bobolt.json");
       await fs.writeFile(legacyPath, "{}", "utf-8");
 
       process.env.HOME = root;
@@ -154,25 +154,25 @@ describe("state + config path candidates", () => {
       } else {
         process.env.HOMEPATH = previousHomePath;
       }
-      if (previousOpenClawConfig === undefined) {
+      if (previousBoboltConfig === undefined) {
         delete process.env.OPENCLAW_CONFIG_PATH;
       } else {
-        process.env.OPENCLAW_CONFIG_PATH = previousOpenClawConfig;
+        process.env.OPENCLAW_CONFIG_PATH = previousBoboltConfig;
       }
-      if (previousOpenClawConfig === undefined) {
+      if (previousBoboltConfig === undefined) {
         delete process.env.OPENCLAW_CONFIG_PATH;
       } else {
-        process.env.OPENCLAW_CONFIG_PATH = previousOpenClawConfig;
+        process.env.OPENCLAW_CONFIG_PATH = previousBoboltConfig;
       }
-      if (previousOpenClawState === undefined) {
+      if (previousBoboltState === undefined) {
         delete process.env.OPENCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousOpenClawState;
+        process.env.OPENCLAW_STATE_DIR = previousBoboltState;
       }
-      if (previousOpenClawState === undefined) {
+      if (previousBoboltState === undefined) {
         delete process.env.OPENCLAW_STATE_DIR;
       } else {
-        process.env.OPENCLAW_STATE_DIR = previousOpenClawState;
+        process.env.OPENCLAW_STATE_DIR = previousBoboltState;
       }
       await fs.rm(root, { recursive: true, force: true });
       vi.resetModules();
@@ -180,17 +180,17 @@ describe("state + config path candidates", () => {
   });
 
   it("respects state dir overrides when config is missing", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-config-override-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-config-override-"));
     try {
-      const legacyDir = path.join(root, ".openclaw");
+      const legacyDir = path.join(root, ".bobolt");
       await fs.mkdir(legacyDir, { recursive: true });
-      const legacyConfig = path.join(legacyDir, "openclaw.json");
+      const legacyConfig = path.join(legacyDir, "bobolt.json");
       await fs.writeFile(legacyConfig, "{}", "utf-8");
 
       const overrideDir = path.join(root, "override");
       const env = { OPENCLAW_STATE_DIR: overrideDir } as NodeJS.ProcessEnv;
       const resolved = resolveConfigPath(env, overrideDir, () => root);
-      expect(resolved).toBe(path.join(overrideDir, "openclaw.json"));
+      expect(resolved).toBe(path.join(overrideDir, "bobolt.json"));
     } finally {
       await fs.rm(root, { recursive: true, force: true });
     }

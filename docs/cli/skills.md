@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `openclaw skills` (list/info/check) and skill eligibility"
+summary: "CLI reference for `bobolt skills` (list/info/check) and skill eligibility"
 read_when:
   - You want to see which skills are available and ready to run
   - You want to debug missing binaries/env/config for skills
 title: "skills"
 ---
 
-# `openclaw skills`
+# `bobolt skills`
 
 Inspect skills (bundled + workspace + managed overrides) and see what’s eligible vs missing requirements.
 
@@ -19,8 +19,8 @@ Related:
 ## Commands
 
 ```bash
-openclaw skills list
-openclaw skills list --eligible
-openclaw skills info <name>
-openclaw skills check
+bobolt skills list
+bobolt skills list --eligible
+bobolt skills info <name>
+bobolt skills check
 ```

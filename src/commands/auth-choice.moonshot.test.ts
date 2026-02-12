@@ -52,7 +52,7 @@ describe("applyAuthChoice (moonshot)", () => {
   });
 
   it("keeps the .cn baseUrl when setDefaultModel is false", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-auth-"));
     process.env.OPENCLAW_STATE_DIR = tempStateDir;
     process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
     process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;
@@ -107,7 +107,7 @@ describe("applyAuthChoice (moonshot)", () => {
   });
 
   it("sets the default model when setDefaultModel is true", async () => {
-    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-auth-"));
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-auth-"));
     process.env.OPENCLAW_STATE_DIR = tempStateDir;
     process.env.OPENCLAW_AGENT_DIR = path.join(tempStateDir, "agent");
     process.env.PI_CODING_AGENT_DIR = process.env.OPENCLAW_AGENT_DIR;

@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { BoboltConfig } from "../config/config.js";
 import { isDiagnosticFlagEnabled, resolveDiagnosticFlags } from "./diagnostic-flags.js";
 
 describe("diagnostic flags", () => {
   it("merges config + env flags", () => {
     const cfg = {
       diagnostics: { flags: ["telegram.http", "cache.*"] },
-    } as OpenClawConfig;
+    } as BoboltConfig;
     const env = {
       OPENCLAW_DIAGNOSTICS: "foo,bar",
     } as NodeJS.ProcessEnv;

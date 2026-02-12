@@ -1,12 +1,12 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { BoboltConfig } from "../config/config.js";
 import { DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveAllowlistModelKey } from "../agents/model-selection.js";
 
 export function ensureModelAllowlistEntry(params: {
-  cfg: OpenClawConfig;
+  cfg: BoboltConfig;
   modelRef: string;
   defaultProvider?: string;
-}): OpenClawConfig {
+}): BoboltConfig {
   const rawModelRef = params.modelRef.trim();
   if (!rawModelRef) {
     return params.cfg;

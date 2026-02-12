@@ -1,12 +1,12 @@
-import type { OpenClawConfig, WizardPrompter } from "openclaw/plugin-sdk";
-import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "openclaw/plugin-sdk";
+import type { BoboltConfig, WizardPrompter } from "bobolt/plugin-sdk";
+import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "bobolt/plugin-sdk";
 
 type PromptAccountIdParams = {
-  cfg: OpenClawConfig;
+  cfg: BoboltConfig;
   prompter: WizardPrompter;
   label: string;
   currentId?: string;
-  listAccountIds: (cfg: OpenClawConfig) => string[];
+  listAccountIds: (cfg: BoboltConfig) => string[];
   defaultAccountId: string;
 };
 

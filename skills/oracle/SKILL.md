@@ -4,7 +4,7 @@ description: Best practices for using the oracle CLI (prompt + file bundling, en
 homepage: https://askoracle.dev
 metadata:
   {
-    "openclaw":
+    "bobolt":
       {
         "emoji": "🧿",
         "requires": { "bins": ["oracle"] },

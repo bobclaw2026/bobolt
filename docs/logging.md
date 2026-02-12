@@ -9,7 +9,7 @@ title: "Logging"
 
 # Logging
 
-OpenClaw logs in two places:
+Bobolt logs in two places:
 
 - **File logs** (JSON lines) written by the Gateway.
 - **Console output** shown in terminals and the Control UI.
@@ -21,16 +21,16 @@ levels and formats.
 
 By default, the Gateway writes a rolling log file under:
 
-`/tmp/openclaw/openclaw-YYYY-MM-DD.log`
+`/tmp/bobolt/bobolt-YYYY-MM-DD.log`
 
 The date uses the gateway host's local timezone.
 
-You can override this in `~/.openclaw/openclaw.json`:
+You can override this in `~/.bobolt/bobolt.json`:
 
 ```json
 {
   "logging": {
-    "file": "/path/to/openclaw.log"
+    "file": "/path/to/bobolt.log"
   }
 }
 ```
@@ -42,7 +42,7 @@ You can override this in `~/.openclaw/openclaw.json`:
 Use the CLI to tail the gateway log file via RPC:
 
 ```bash
-openclaw logs --follow
+bobolt logs --follow
 ```
 
 Output modes:
@@ -63,7 +63,7 @@ In JSON mode, the CLI emits `type`-tagged objects:
 If the Gateway is unreachable, the CLI prints a short hint to run:
 
 ```bash
-openclaw doctor
+bobolt doctor
 ```
 
 ### Control UI (web)
@@ -76,7 +76,7 @@ See [/web/control-ui](/web/control-ui) for how to open it.
 To filter channel activity (WhatsApp/Telegram/etc), use:
 
 ```bash
-openclaw channels logs --channel whatsapp
+bobolt channels logs --channel whatsapp
 ```
 
 ## Log formats
@@ -98,13 +98,13 @@ Console formatting is controlled by `logging.consoleStyle`.
 
 ## Configuring logging
 
-All logging configuration lives under `logging` in `~/.openclaw/openclaw.json`.
+All logging configuration lives under `logging` in `~/.bobolt/bobolt.json`.
 
 ```json
 {
   "logging": {
     "level": "info",
-    "file": "/tmp/openclaw/openclaw-YYYY-MM-DD.log",
+    "file": "/tmp/bobolt/bobolt-YYYY-MM-DD.log",
     "consoleLevel": "info",
     "consoleStyle": "pretty",
     "redactSensitive": "tools",
@@ -150,7 +150,7 @@ diagnostics + the exporter plugin are enabled.
 
 - **OpenTelemetry (OTel)**: the data model + SDKs for traces, metrics, and logs.
 - **OTLP**: the wire protocol used to export OTel data to a collector/backend.
-- OpenClaw exports via **OTLP/HTTP (protobuf)** today.
+- Bobolt exports via **OTLP/HTTP (protobuf)** today.
 
 ### Signals exported
 
@@ -240,7 +240,7 @@ works with any OpenTelemetry collector/backend that accepts OTLP/HTTP.
       "enabled": true,
       "endpoint": "http://otel-collector:4318",
       "protocol": "http/protobuf",
-      "serviceName": "openclaw-gateway",
+      "serviceName": "bobolt-gateway",
       "traces": true,
       "metrics": true,
       "logs": true,
@@ -253,7 +253,7 @@ works with any OpenTelemetry collector/backend that accepts OTLP/HTTP.
 
 Notes:
 
-- You can also enable the plugin with `openclaw plugins enable diagnostics-otel`.
+- You can also enable the plugin with `bobolt plugins enable diagnostics-otel`.
 - `protocol` currently supports `http/protobuf` only. `grpc` is ignored.
 - Metrics include token usage, cost, context size, run duration, and message-flow
   counters/histograms (webhooks, queueing, session state, queue depth/wait).
@@ -267,60 +267,60 @@ Notes:
 
 Model usage:
 
-- `openclaw.tokens` (counter, attrs: `openclaw.token`, `openclaw.channel`,
-  `openclaw.provider`, `openclaw.model`)
-- `openclaw.cost.usd` (counter, attrs: `openclaw.channel`, `openclaw.provider`,
-  `openclaw.model`)
-- `openclaw.run.duration_ms` (histogram, attrs: `openclaw.channel`,
-  `openclaw.provider`, `openclaw.model`)
-- `openclaw.context.tokens` (histogram, attrs: `openclaw.context`,
-  `openclaw.channel`, `openclaw.provider`, `openclaw.model`)
+- `bobolt.tokens` (counter, attrs: `bobolt.token`, `bobolt.channel`,
+  `bobolt.provider`, `bobolt.model`)
+- `bobolt.cost.usd` (counter, attrs: `bobolt.channel`, `bobolt.provider`,
+  `bobolt.model`)
+- `bobolt.run.duration_ms` (histogram, attrs: `bobolt.channel`,
+  `bobolt.provider`, `bobolt.model`)
+- `bobolt.context.tokens` (histogram, attrs: `bobolt.context`,
+  `bobolt.channel`, `bobolt.provider`, `bobolt.model`)
 
 Message flow:
 
-- `openclaw.webhook.received` (counter, attrs: `openclaw.channel`,
-  `openclaw.webhook`)
-- `openclaw.webhook.error` (counter, attrs: `openclaw.channel`,
-  `openclaw.webhook`)
-- `openclaw.webhook.duration_ms` (histogram, attrs: `openclaw.channel`,
-  `openclaw.webhook`)
-- `openclaw.message.queued` (counter, attrs: `openclaw.channel`,
-  `openclaw.source`)
-- `openclaw.message.processed` (counter, attrs: `openclaw.channel`,
-  `openclaw.outcome`)
-- `openclaw.message.duration_ms` (histogram, attrs: `openclaw.channel`,
-  `openclaw.outcome`)
+- `bobolt.webhook.received` (counter, attrs: `bobolt.channel`,
+  `bobolt.webhook`)
+- `bobolt.webhook.error` (counter, attrs: `bobolt.channel`,
+  `bobolt.webhook`)
+- `bobolt.webhook.duration_ms` (histogram, attrs: `bobolt.channel`,
+  `bobolt.webhook`)
+- `bobolt.message.queued` (counter, attrs: `bobolt.channel`,
+  `bobolt.source`)
+- `bobolt.message.processed` (counter, attrs: `bobolt.channel`,
+  `bobolt.outcome`)
+- `bobolt.message.duration_ms` (histogram, attrs: `bobolt.channel`,
+  `bobolt.outcome`)
 
 Queues + sessions:
 
-- `openclaw.queue.lane.enqueue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.lane.dequeue` (counter, attrs: `openclaw.lane`)
-- `openclaw.queue.depth` (histogram, attrs: `openclaw.lane` or
-  `openclaw.channel=heartbeat`)
-- `openclaw.queue.wait_ms` (histogram, attrs: `openclaw.lane`)
-- `openclaw.session.state` (counter, attrs: `openclaw.state`, `openclaw.reason`)
-- `openclaw.session.stuck` (counter, attrs: `openclaw.state`)
-- `openclaw.session.stuck_age_ms` (histogram, attrs: `openclaw.state`)
-- `openclaw.run.attempt` (counter, attrs: `openclaw.attempt`)
+- `bobolt.queue.lane.enqueue` (counter, attrs: `bobolt.lane`)
+- `bobolt.queue.lane.dequeue` (counter, attrs: `bobolt.lane`)
+- `bobolt.queue.depth` (histogram, attrs: `bobolt.lane` or
+  `bobolt.channel=heartbeat`)
+- `bobolt.queue.wait_ms` (histogram, attrs: `bobolt.lane`)
+- `bobolt.session.state` (counter, attrs: `bobolt.state`, `bobolt.reason`)
+- `bobolt.session.stuck` (counter, attrs: `bobolt.state`)
+- `bobolt.session.stuck_age_ms` (histogram, attrs: `bobolt.state`)
+- `bobolt.run.attempt` (counter, attrs: `bobolt.attempt`)
 
 ### Exported spans (names + key attributes)
 
-- `openclaw.model.usage`
-  - `openclaw.channel`, `openclaw.provider`, `openclaw.model`
-  - `openclaw.sessionKey`, `openclaw.sessionId`
-  - `openclaw.tokens.*` (input/output/cache_read/cache_write/total)
-- `openclaw.webhook.processed`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.chatId`
-- `openclaw.webhook.error`
-  - `openclaw.channel`, `openclaw.webhook`, `openclaw.chatId`,
-    `openclaw.error`
-- `openclaw.message.processed`
-  - `openclaw.channel`, `openclaw.outcome`, `openclaw.chatId`,
-    `openclaw.messageId`, `openclaw.sessionKey`, `openclaw.sessionId`,
-    `openclaw.reason`
-- `openclaw.session.stuck`
-  - `openclaw.state`, `openclaw.ageMs`, `openclaw.queueDepth`,
-    `openclaw.sessionKey`, `openclaw.sessionId`
+- `bobolt.model.usage`
+  - `bobolt.channel`, `bobolt.provider`, `bobolt.model`
+  - `bobolt.sessionKey`, `bobolt.sessionId`
+  - `bobolt.tokens.*` (input/output/cache_read/cache_write/total)
+- `bobolt.webhook.processed`
+  - `bobolt.channel`, `bobolt.webhook`, `bobolt.chatId`
+- `bobolt.webhook.error`
+  - `bobolt.channel`, `bobolt.webhook`, `bobolt.chatId`,
+    `bobolt.error`
+- `bobolt.message.processed`
+  - `bobolt.channel`, `bobolt.outcome`, `bobolt.chatId`,
+    `bobolt.messageId`, `bobolt.sessionKey`, `bobolt.sessionId`,
+    `bobolt.reason`
+- `bobolt.session.stuck`
+  - `bobolt.state`, `bobolt.ageMs`, `bobolt.queueDepth`,
+    `bobolt.sessionKey`, `bobolt.sessionId`
 
 ### Sampling + flushing
 
@@ -344,7 +344,7 @@ Queues + sessions:
 
 ## Troubleshooting tips
 
-- **Gateway not reachable?** Run `openclaw doctor` first.
+- **Gateway not reachable?** Run `bobolt doctor` first.
 - **Logs empty?** Check that the Gateway is running and writing to the file path
   in `logging.file`.
 - **Need more detail?** Set `logging.level` to `debug` or `trace` and retry.

@@ -356,7 +356,7 @@ describe("buildDockerExecArgs", () => {
   });
 
   it("does not interpolate PATH into the shell command", () => {
-    const injectedPath = "$(touch /tmp/openclaw-path-injection)";
+    const injectedPath = "$(touch /tmp/bobolt-path-injection)";
     const args = buildDockerExecArgs({
       containerName: "test-container",
       command: "echo hello",

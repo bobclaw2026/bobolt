@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import type { OpenClawConfig } from "../config/config.js";
+import type { BoboltConfig } from "../config/config.js";
 import {
   discoverAllSessions,
   loadCostUsageSummary,
@@ -11,7 +11,7 @@ import {
 
 describe("session cost usage", () => {
   it("aggregates daily totals with log cost and pricing fallback", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-cost-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-cost-"));
     const sessionsDir = path.join(root, "agents", "main", "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
     const sessionFile = path.join(sessionsDir, "sess-1.jsonl");
@@ -94,7 +94,7 @@ describe("session cost usage", () => {
           },
         },
       },
-    } as OpenClawConfig;
+    } as BoboltConfig;
 
     const originalState = process.env.OPENCLAW_STATE_DIR;
     process.env.OPENCLAW_STATE_DIR = root;
@@ -113,7 +113,7 @@ describe("session cost usage", () => {
   });
 
   it("summarizes a single session file", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-cost-session-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-cost-session-"));
     const sessionFile = path.join(root, "session.jsonl");
     const now = new Date();
 
@@ -146,7 +146,7 @@ describe("session cost usage", () => {
   });
 
   it("captures message counts, tool usage, and model usage", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-cost-session-meta-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-cost-session-meta-"));
     const sessionFile = path.join(root, "session.jsonl");
     const start = new Date("2026-02-01T10:00:00.000Z");
     const end = new Date("2026-02-01T10:05:00.000Z");
@@ -214,7 +214,7 @@ describe("session cost usage", () => {
   });
 
   it("does not exclude sessions with mtime after endMs during discovery", async () => {
-    const root = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-discover-"));
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-discover-"));
     const sessionsDir = path.join(root, "agents", "main", "sessions");
     await fs.mkdir(sessionsDir, { recursive: true });
     const sessionFile = path.join(sessionsDir, "sess-late.jsonl");

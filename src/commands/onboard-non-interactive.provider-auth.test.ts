@@ -83,7 +83,7 @@ async function withOnboardEnv(
   delete process.env.CUSTOM_API_KEY;
 
   const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
-  const configPath = path.join(tempHome, "openclaw.json");
+  const configPath = path.join(tempHome, "bobolt.json");
   process.env.HOME = tempHome;
   process.env.OPENCLAW_STATE_DIR = tempHome;
   process.env.OPENCLAW_CONFIG_PATH = configPath;
@@ -140,7 +140,7 @@ async function expectApiKeyProfile(params: {
 
 describe("onboard (non-interactive): provider auth", () => {
   it("stores xAI API key and sets default model", async () => {
-    await withOnboardEnv("openclaw-onboard-xai-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-xai-", async ({ configPath, runtime }) => {
       await runNonInteractive(
         {
           nonInteractive: true,
@@ -167,7 +167,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("stores Vercel AI Gateway API key and sets default model", async () => {
-    await withOnboardEnv("openclaw-onboard-ai-gateway-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-ai-gateway-", async ({ configPath, runtime }) => {
       await runNonInteractive(
         {
           nonInteractive: true,
@@ -200,7 +200,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("stores token auth profile", async () => {
-    await withOnboardEnv("openclaw-onboard-token-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-token-", async ({ configPath, runtime }) => {
       const token = `sk-ant-oat01-${"a".repeat(80)}`;
 
       await runNonInteractive(
@@ -236,7 +236,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("stores OpenAI API key and sets OpenAI default model", async () => {
-    await withOnboardEnv("openclaw-onboard-openai-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-openai-", async ({ configPath, runtime }) => {
       await runNonInteractive(
         {
           nonInteractive: true,
@@ -259,7 +259,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("stores Cloudflare AI Gateway API key and metadata", async () => {
-    await withOnboardEnv("openclaw-onboard-cf-gateway-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-cf-gateway-", async ({ configPath, runtime }) => {
       await runNonInteractive(
         {
           nonInteractive: true,
@@ -295,7 +295,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("infers Cloudflare auth choice from API key flags", async () => {
-    await withOnboardEnv("openclaw-onboard-cf-gateway-infer-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-cf-gateway-infer-", async ({ configPath, runtime }) => {
       await runNonInteractive(
         {
           nonInteractive: true,
@@ -330,7 +330,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("configures a custom provider from non-interactive flags", async () => {
-    await withOnboardEnv("openclaw-onboard-custom-provider-", async ({ configPath, runtime }) => {
+    await withOnboardEnv("bobolt-onboard-custom-provider-", async ({ configPath, runtime }) => {
       await runNonInteractive(
         {
           nonInteractive: true,
@@ -373,7 +373,7 @@ describe("onboard (non-interactive): provider auth", () => {
 
   it("infers custom provider auth choice from custom flags", async () => {
     await withOnboardEnv(
-      "openclaw-onboard-custom-provider-infer-",
+      "bobolt-onboard-custom-provider-infer-",
       async ({ configPath, runtime }) => {
         await runNonInteractive(
           {
@@ -415,7 +415,7 @@ describe("onboard (non-interactive): provider auth", () => {
 
   it("uses CUSTOM_API_KEY env fallback for non-interactive custom provider auth", async () => {
     await withOnboardEnv(
-      "openclaw-onboard-custom-provider-env-fallback-",
+      "bobolt-onboard-custom-provider-env-fallback-",
       async ({ configPath, runtime }) => {
         process.env.CUSTOM_API_KEY = "custom-env-key";
 
@@ -453,7 +453,7 @@ describe("onboard (non-interactive): provider auth", () => {
 
   it("uses matching profile fallback for non-interactive custom provider auth", async () => {
     await withOnboardEnv(
-      "openclaw-onboard-custom-provider-profile-fallback-",
+      "bobolt-onboard-custom-provider-profile-fallback-",
       async ({ configPath, runtime }) => {
         const { upsertAuthProfile } = await import("../agents/auth-profiles.js");
         upsertAuthProfile({
@@ -499,7 +499,7 @@ describe("onboard (non-interactive): provider auth", () => {
 
   it("fails custom provider auth when compatibility is invalid", async () => {
     await withOnboardEnv(
-      "openclaw-onboard-custom-provider-invalid-compat-",
+      "bobolt-onboard-custom-provider-invalid-compat-",
       async ({ runtime }) => {
         await expect(
           runNonInteractive(
@@ -522,7 +522,7 @@ describe("onboard (non-interactive): provider auth", () => {
   }, 60_000);
 
   it("fails custom provider auth when explicit provider id is invalid", async () => {
-    await withOnboardEnv("openclaw-onboard-custom-provider-invalid-id-", async ({ runtime }) => {
+    await withOnboardEnv("bobolt-onboard-custom-provider-invalid-id-", async ({ runtime }) => {
       await expect(
         runNonInteractive(
           {
@@ -546,7 +546,7 @@ describe("onboard (non-interactive): provider auth", () => {
 
   it("fails inferred custom auth when required flags are incomplete", async () => {
     await withOnboardEnv(
-      "openclaw-onboard-custom-provider-missing-required-",
+      "bobolt-onboard-custom-provider-missing-required-",
       async ({ runtime }) => {
         await expect(
           runNonInteractive(

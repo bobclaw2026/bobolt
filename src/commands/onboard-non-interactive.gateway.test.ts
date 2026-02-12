@@ -130,7 +130,7 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
     delete process.env.OPENCLAW_GATEWAY_TOKEN;
     delete process.env.OPENCLAW_GATEWAY_PASSWORD;
 
-    tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-onboard-"));
+    tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-onboard-"));
     process.env.HOME = tempHome;
   });
 
@@ -153,7 +153,7 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
   it("writes gateway token auth into config and gateway enforces it", async () => {
     const stateDir = await initStateDir("state-noninteractive-");
     const token = "tok_test_123";
-    const workspace = path.join(stateDir, "openclaw");
+    const workspace = path.join(stateDir, "bobolt");
 
     const { runNonInteractiveOnboarding } = await import("./onboard-non-interactive.js");
     await runNonInteractiveOnboarding(
@@ -237,10 +237,10 @@ describe("onboard (non-interactive): gateway and remote auth", () => {
     }
     const stateDir = await initStateDir("state-lan-");
     process.env.OPENCLAW_STATE_DIR = stateDir;
-    process.env.OPENCLAW_CONFIG_PATH = path.join(stateDir, "openclaw.json");
+    process.env.OPENCLAW_CONFIG_PATH = path.join(stateDir, "bobolt.json");
 
     const port = await getFreeGatewayPort();
-    const workspace = path.join(stateDir, "openclaw");
+    const workspace = path.join(stateDir, "bobolt");
 
     // Other test files mock ../config/config.js. This onboarding flow needs the real
     // implementation so it can persist the config and then read it back (Windows CI

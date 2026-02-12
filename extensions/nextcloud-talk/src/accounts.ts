@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { DEFAULT_ACCOUNT_ID, isTruthyEnvValue, normalizeAccountId } from "openclaw/plugin-sdk";
+import { DEFAULT_ACCOUNT_ID, isTruthyEnvValue, normalizeAccountId } from "bobolt/plugin-sdk";
 import type { CoreConfig, NextcloudTalkAccountConfig } from "./types.js";
 
 const debugAccounts = (...args: unknown[]) => {

@@ -1,4 +1,4 @@
-import type { PluginRuntime } from "openclaw/plugin-sdk";
+import type { PluginRuntime } from "bobolt/plugin-sdk";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -14,7 +14,7 @@ const runtimeStub = {
         return override;
       }
       const resolvedHome = homedir ? homedir() : os.homedir();
-      return path.join(resolvedHome, ".openclaw");
+      return path.join(resolvedHome, ".bobolt");
     },
   },
 } as unknown as PluginRuntime;
@@ -39,7 +39,7 @@ describe("msteams polls", () => {
   it("extracts poll votes from activity values", () => {
     const vote = extractMSTeamsPollVote({
       value: {
-        openclawPollId: "poll-1",
+        boboltPollId: "poll-1",
         choices: "0,1",
       },
     });
@@ -51,7 +51,7 @@ describe("msteams polls", () => {
   });
 
   it("stores and records poll votes", async () => {
-    const home = await fs.promises.mkdtemp(path.join(os.tmpdir(), "openclaw-msteams-polls-"));
+    const home = await fs.promises.mkdtemp(path.join(os.tmpdir(), "bobolt-msteams-polls-"));
     const store = createMSTeamsPollStoreFs({ homedir: () => home });
     await store.createPoll({
       id: "poll-2",

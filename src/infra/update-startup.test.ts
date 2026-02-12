@@ -4,8 +4,8 @@ import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { UpdateCheckResult } from "./update-check.js";
 
-vi.mock("./openclaw-root.js", () => ({
-  resolveOpenClawPackageRoot: vi.fn(),
+vi.mock("./bobolt-root.js", () => ({
+  resolveBoboltPackageRoot: vi.fn(),
 }));
 
 vi.mock("./update-check.js", async () => {
@@ -29,7 +29,7 @@ describe("update-startup", () => {
   beforeEach(async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-01-17T10:00:00Z"));
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-update-check-"));
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-update-check-"));
     process.env.OPENCLAW_STATE_DIR = tempDir;
     delete process.env.VITEST;
     process.env.NODE_ENV = "test";
@@ -42,13 +42,13 @@ describe("update-startup", () => {
   });
 
   it("logs update hint for npm installs when newer tag exists", async () => {
-    const { resolveOpenClawPackageRoot } = await import("./openclaw-root.js");
+    const { resolveBoboltPackageRoot } = await import("./bobolt-root.js");
     const { checkUpdateStatus, resolveNpmChannelTag } = await import("./update-check.js");
     const { runGatewayUpdateCheck } = await import("./update-startup.js");
 
-    vi.mocked(resolveOpenClawPackageRoot).mockResolvedValue("/opt/openclaw");
+    vi.mocked(resolveBoboltPackageRoot).mockResolvedValue("/opt/bobolt");
     vi.mocked(checkUpdateStatus).mockResolvedValue({
-      root: "/opt/openclaw",
+      root: "/opt/bobolt",
       installKind: "package",
       packageManager: "npm",
     } satisfies UpdateCheckResult);
@@ -76,13 +76,13 @@ describe("update-startup", () => {
   });
 
   it("uses latest when beta tag is older than release", async () => {
-    const { resolveOpenClawPackageRoot } = await import("./openclaw-root.js");
+    const { resolveBoboltPackageRoot } = await import("./bobolt-root.js");
     const { checkUpdateStatus, resolveNpmChannelTag } = await import("./update-check.js");
     const { runGatewayUpdateCheck } = await import("./update-startup.js");
 
-    vi.mocked(resolveOpenClawPackageRoot).mockResolvedValue("/opt/openclaw");
+    vi.mocked(resolveBoboltPackageRoot).mockResolvedValue("/opt/bobolt");
     vi.mocked(checkUpdateStatus).mockResolvedValue({
-      root: "/opt/openclaw",
+      root: "/opt/bobolt",
       installKind: "package",
       packageManager: "npm",
     } satisfies UpdateCheckResult);

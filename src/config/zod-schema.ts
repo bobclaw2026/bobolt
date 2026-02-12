@@ -92,7 +92,7 @@ const MemorySchema = z
   .strict()
   .optional();
 
-export const OpenClawSchema = z
+export const BoboltSchema = z
   .object({
     meta: z
       .object({

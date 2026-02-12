@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import type { OpenClawConfig } from "openclaw/plugin-sdk";
-import { createReplyPrefixOptions, resolveMentionGatingWithBypass } from "openclaw/plugin-sdk";
+import type { BoboltConfig } from "bobolt/plugin-sdk";
+import { createReplyPrefixOptions, resolveMentionGatingWithBypass } from "bobolt/plugin-sdk";
 import type {
   GoogleChatAnnotation,
   GoogleChatAttachment,
@@ -26,7 +26,7 @@ export type GoogleChatRuntimeEnv = {
 
 export type GoogleChatMonitorOptions = {
   account: ResolvedGoogleChatAccount;
-  config: OpenClawConfig;
+  config: BoboltConfig;
   runtime: GoogleChatRuntimeEnv;
   abortSignal: AbortSignal;
   webhookPath?: string;
@@ -38,7 +38,7 @@ type GoogleChatCoreRuntime = ReturnType<typeof getGoogleChatRuntime>;
 
 type WebhookTarget = {
   account: ResolvedGoogleChatAccount;
-  config: OpenClawConfig;
+  config: BoboltConfig;
   runtime: GoogleChatRuntimeEnv;
   core: GoogleChatCoreRuntime;
   path: string;
@@ -396,12 +396,12 @@ function extractMentionInfo(annotations: GoogleChatAnnotation[], botUser?: strin
  * Resolve bot display name with fallback chain:
  * 1. Account config name
  * 2. Agent name from config
- * 3. "OpenClaw" as generic fallback
+ * 3. "Bobolt" as generic fallback
  */
 function resolveBotDisplayName(params: {
   accountName?: string;
   agentId: string;
-  config: OpenClawConfig;
+  config: BoboltConfig;
 }): string {
   const { accountName, agentId, config } = params;
   if (accountName?.trim()) {
@@ -411,13 +411,13 @@ function resolveBotDisplayName(params: {
   if (agent?.name?.trim()) {
     return agent.name.trim();
   }
-  return "OpenClaw";
+  return "Bobolt";
 }
 
 async function processMessageWithPipeline(params: {
   event: GoogleChatEvent;
   account: ResolvedGoogleChatAccount;
-  config: OpenClawConfig;
+  config: BoboltConfig;
   runtime: GoogleChatRuntimeEnv;
   core: GoogleChatCoreRuntime;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
@@ -792,7 +792,7 @@ async function deliverGoogleChatReply(params: {
   spaceId: string;
   runtime: GoogleChatRuntimeEnv;
   core: GoogleChatCoreRuntime;
-  config: OpenClawConfig;
+  config: BoboltConfig;
   statusSink?: (patch: { lastInboundAt?: number; lastOutboundAt?: number }) => void;
   typingMessageName?: string;
 }): Promise<void> {

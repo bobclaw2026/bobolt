@@ -39,7 +39,7 @@ exit 0
 }
 
 async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
-  const rootDir = await mkdtemp(join(tmpdir(), "openclaw-docker-setup-"));
+  const rootDir = await mkdtemp(join(tmpdir(), "bobolt-docker-setup-"));
   const scriptPath = join(rootDir, "docker-setup.sh");
   const dockerfilePath = join(rootDir, "Dockerfile");
   const composePath = join(rootDir, "docker-compose.yml");
@@ -51,7 +51,7 @@ async function createDockerSetupSandbox(): Promise<DockerSetupSandbox> {
   await writeFile(dockerfilePath, "FROM scratch\n");
   await writeFile(
     composePath,
-    "services:\n  openclaw-gateway:\n    image: noop\n  openclaw-cli:\n    image: noop\n",
+    "services:\n  bobolt-gateway:\n    image: noop\n  bobolt-cli:\n    image: noop\n",
   );
   await writeDockerStub(binDir, logPath);
 
@@ -68,7 +68,7 @@ function createEnv(
     DOCKER_STUB_LOG: sandbox.logPath,
     OPENCLAW_GATEWAY_TOKEN: "test-token",
     OPENCLAW_CONFIG_DIR: join(sandbox.rootDir, "config"),
-    OPENCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "openclaw"),
+    OPENCLAW_WORKSPACE_DIR: join(sandbox.rootDir, "bobolt"),
     ...overrides,
   };
 }
@@ -111,7 +111,7 @@ describe("docker-setup.sh", () => {
     const sandbox = await createDockerSetupSandbox();
     const env = createEnv(sandbox, {
       OPENCLAW_EXTRA_MOUNTS: "",
-      OPENCLAW_HOME_VOLUME: "openclaw-home",
+      OPENCLAW_HOME_VOLUME: "bobolt-home",
     });
 
     const result = spawnSync("bash", [sandbox.scriptPath], {
@@ -123,9 +123,9 @@ describe("docker-setup.sh", () => {
     expect(result.status).toBe(0);
 
     const extraCompose = await readFile(join(sandbox.rootDir, "docker-compose.extra.yml"), "utf8");
-    expect(extraCompose).toContain("openclaw-home:/home/node");
+    expect(extraCompose).toContain("bobolt-home:/home/node");
     expect(extraCompose).toContain("volumes:");
-    expect(extraCompose).toContain("openclaw-home:");
+    expect(extraCompose).toContain("bobolt-home:");
   });
 
   it("avoids associative arrays so the script remains Bash 3.2-compatible", async () => {

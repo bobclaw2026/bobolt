@@ -1,17 +1,17 @@
 ---
-summary: "OpenClaw on Raspberry Pi (budget self-hosted setup)"
+summary: "Bobolt on Raspberry Pi (budget self-hosted setup)"
 read_when:
-  - Setting up OpenClaw on a Raspberry Pi
-  - Running OpenClaw on ARM devices
+  - Setting up Bobolt on a Raspberry Pi
+  - Running Bobolt on ARM devices
   - Building a cheap always-on personal AI
 title: "Raspberry Pi"
 ---
 
-# OpenClaw on Raspberry Pi
+# Bobolt on Raspberry Pi
 
 ## Goal
 
-Run a persistent, always-on OpenClaw Gateway on a Raspberry Pi for **~$35-80** one-time cost (no monthly fees).
+Run a persistent, always-on Bobolt Gateway on a Raspberry Pi for **~$35-80** one-time cost (no monthly fees).
 
 Perfect for:
 
@@ -107,19 +107,19 @@ echo 'vm.swappiness=10' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-## 6) Install OpenClaw
+## 6) Install Bobolt
 
 ### Option A: Standard Install (Recommended)
 
 ```bash
-curl -fsSL https://openclaw.ai/install.sh | bash
+curl -fsSL https://bobolt.ai/install.sh | bash
 ```
 
 ### Option B: Hackable Install (For tinkering)
 
 ```bash
-git clone https://github.com/openclaw/openclaw.git
-cd openclaw
+git clone https://github.com/bobolt/bobolt.git
+cd bobolt
 npm install
 npm run build
 npm link
@@ -130,7 +130,7 @@ The hackable install gives you direct access to logs and code — useful for deb
 ## 7) Run Onboarding
 
 ```bash
-openclaw onboard --install-daemon
+bobolt onboard --install-daemon
 ```
 
 Follow the wizard:
@@ -144,13 +144,13 @@ Follow the wizard:
 
 ```bash
 # Check status
-openclaw status
+bobolt status
 
 # Check service
-sudo systemctl status openclaw
+sudo systemctl status bobolt
 
 # View logs
-journalctl -u openclaw -f
+journalctl -u bobolt -f
 ```
 
 ## 9) Access the Dashboard
@@ -173,8 +173,8 @@ curl -fsSL https://tailscale.com/install.sh | sh
 sudo tailscale up
 
 # Update config
-openclaw config set gateway.bind tailnet
-sudo systemctl restart openclaw
+bobolt config set gateway.bind tailnet
+sudo systemctl restart bobolt
 ```
 
 ---
@@ -221,7 +221,7 @@ htop
 
 ### Binary Compatibility
 
-Most OpenClaw features work on ARM64, but some external binaries may need ARM builds:
+Most Bobolt features work on ARM64, but some external binaries may need ARM builds:
 
 | Tool               | ARM64 Status | Notes                               |
 | ------------------ | ------------ | ----------------------------------- |
@@ -271,13 +271,13 @@ The onboarding wizard sets this up, but to verify:
 
 ```bash
 # Check service is enabled
-sudo systemctl is-enabled openclaw
+sudo systemctl is-enabled bobolt
 
 # Enable if not
-sudo systemctl enable openclaw
+sudo systemctl enable bobolt
 
 # Start on boot
-sudo systemctl start openclaw
+sudo systemctl start bobolt
 ```
 
 ---
@@ -304,12 +304,12 @@ free -h
 
 ```bash
 # Check logs
-journalctl -u openclaw --no-pager -n 100
+journalctl -u bobolt --no-pager -n 100
 
 # Common fix: rebuild
-cd ~/openclaw  # if using hackable install
+cd ~/bobolt  # if using hackable install
 npm run build
-sudo systemctl restart openclaw
+sudo systemctl restart bobolt
 ```
 
 ### ARM Binary Issues

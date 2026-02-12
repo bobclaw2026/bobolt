@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/discord",
+  "name": "@bobolt/discord",
   "version": "2026.2.10",
-  "description": "OpenClaw Discord channel plugin",
+  "description": "Bobolt Discord channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "bobolt": "workspace:*"
   },
-  "openclaw": {
+  "bobolt": {
     "extensions": [
       "./index.ts"
     ]

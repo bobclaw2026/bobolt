@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, afterEach } from "vitest";
 import { resetGlobalHookRunner } from "../plugins/hook-runner-global.js";
-import { loadOpenClawPlugins } from "../plugins/loader.js";
+import { loadBoboltPlugins } from "../plugins/loader.js";
 import { guardSessionManager } from "./session-tool-result-guard-wrapper.js";
 
 const EMPTY_PLUGIN_SCHEMA = { type: "object", additionalProperties: false, properties: {} };
@@ -16,7 +16,7 @@ function writeTempPlugin(params: { dir: string; id: string; body: string }): str
   const file = path.join(pluginDir, `${params.id}.mjs`);
   fs.writeFileSync(file, params.body, "utf-8");
   fs.writeFileSync(
-    path.join(pluginDir, "openclaw.plugin.json"),
+    path.join(pluginDir, "bobolt.plugin.json"),
     JSON.stringify(
       {
         id: params.id,
@@ -67,7 +67,7 @@ describe("tool_result_persist hook", () => {
   });
 
   it("composes transforms in priority order and allows stripping toolResult.details", () => {
-    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "openclaw-toolpersist-"));
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "bobolt-toolpersist-"));
     process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = "/nonexistent/bundled/plugins";
 
     const pluginA = writeTempPlugin({
@@ -94,7 +94,7 @@ describe("tool_result_persist hook", () => {
 } };`,
     });
 
-    loadOpenClawPlugins({
+    loadBoboltPlugins({
       cache: false,
       workspaceDir: tmp,
       config: {

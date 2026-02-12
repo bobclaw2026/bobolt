@@ -24,10 +24,10 @@ describe("onboard (non-interactive): xAI", () => {
     delete process.env.OPENCLAW_GATEWAY_TOKEN;
     delete process.env.OPENCLAW_GATEWAY_PASSWORD;
 
-    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-onboard-xai-"));
+    const tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-onboard-xai-"));
     process.env.HOME = tempHome;
     process.env.OPENCLAW_STATE_DIR = tempHome;
-    process.env.OPENCLAW_CONFIG_PATH = path.join(tempHome, "openclaw.json");
+    process.env.OPENCLAW_CONFIG_PATH = path.join(tempHome, "bobolt.json");
     vi.resetModules();
 
     const runtime = {

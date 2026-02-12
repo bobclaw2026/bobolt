@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { OpenClawPackageManifest } from "../../plugins/manifest.js";
+import type { BoboltPackageManifest } from "../../plugins/manifest.js";
 import type { PluginOrigin } from "../../plugins/types.js";
 import type { ChannelMeta } from "./types.js";
 import { MANIFEST_KEY } from "../../compat/legacy-names.js";
-import { discoverOpenClawPlugins } from "../../plugins/discovery.js";
+import { discoverBoboltPlugins } from "../../plugins/discovery.js";
 import { CONFIG_DIR, isRecord, resolveUserPath } from "../../utils.js";
 
 export type ChannelUiMetaEntry = {
@@ -49,7 +49,7 @@ type ExternalCatalogEntry = {
   name?: string;
   version?: string;
   description?: string;
-} & Partial<Record<ManifestKey, OpenClawPackageManifest>>;
+} & Partial<Record<ManifestKey, BoboltPackageManifest>>;
 
 const DEFAULT_CATALOG_PATHS = [
   path.join(CONFIG_DIR, "mpm", "plugins.json"),
@@ -119,7 +119,7 @@ function loadExternalCatalogEntries(options: CatalogOptions): ExternalCatalogEnt
 }
 
 function toChannelMeta(params: {
-  channel: NonNullable<OpenClawPackageManifest["channel"]>;
+  channel: NonNullable<BoboltPackageManifest["channel"]>;
   id: string;
 }): ChannelMeta | null {
   const label = params.channel.label?.trim();
@@ -169,7 +169,7 @@ function toChannelMeta(params: {
 }
 
 function resolveInstallInfo(params: {
-  manifest: OpenClawPackageManifest;
+  manifest: BoboltPackageManifest;
   packageName?: string;
   packageDir?: string;
   workspaceDir?: string;
@@ -194,7 +194,7 @@ function buildCatalogEntry(candidate: {
   packageName?: string;
   packageDir?: string;
   workspaceDir?: string;
-  packageManifest?: OpenClawPackageManifest;
+  packageManifest?: BoboltPackageManifest;
 }): ChannelPluginCatalogEntry | null {
   const manifest = candidate.packageManifest;
   if (!manifest?.channel) {
@@ -259,7 +259,7 @@ export function buildChannelUiCatalog(
 export function listChannelPluginCatalogEntries(
   options: CatalogOptions = {},
 ): ChannelPluginCatalogEntry[] {
-  const discovery = discoverOpenClawPlugins({ workspaceDir: options.workspaceDir });
+  const discovery = discoverBoboltPlugins({ workspaceDir: options.workspaceDir });
   const resolved = new Map<string, { entry: ChannelPluginCatalogEntry; priority: number }>();
 
   for (const candidate of discovery.candidates) {

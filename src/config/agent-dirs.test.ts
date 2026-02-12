@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { OpenClawConfig } from "./types.js";
+import type { BoboltConfig } from "./types.js";
 import { findDuplicateAgentDirs } from "./agent-dirs.js";
 
 afterEach(() => {
@@ -15,14 +15,14 @@ describe("resolveEffectiveAgentDir via findDuplicateAgentDirs", () => {
     // since they have different IDs.  Instead we just verify no crash and
     // that the env flows through by checking a two-agent config produces
     // distinct dirs (no duplicates).
-    const cfg: OpenClawConfig = {
+    const cfg: BoboltConfig = {
       agents: {
         list: [{ id: "alpha" }, { id: "beta" }],
       },
     };
 
     const env = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      OPENCLAW_HOME: "/srv/bobolt-home",
       HOME: "/home/other",
     } as NodeJS.ProcessEnv;
 
@@ -34,10 +34,10 @@ describe("resolveEffectiveAgentDir via findDuplicateAgentDirs", () => {
     // Force two agents to the same explicit agentDir to verify the path
     // that doesn't use the default — then test the default path by
     // checking that a single-agent config resolves without duplicates.
-    const cfg: OpenClawConfig = {};
+    const cfg: BoboltConfig = {};
 
     const env = {
-      OPENCLAW_HOME: "/srv/openclaw-home",
+      OPENCLAW_HOME: "/srv/bobolt-home",
     } as NodeJS.ProcessEnv;
 
     // No duplicates for a single default agent

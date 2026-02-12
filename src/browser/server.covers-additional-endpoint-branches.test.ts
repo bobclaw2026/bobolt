@@ -93,9 +93,9 @@ vi.mock("../config/config.js", async (importOriginal) => {
         color: "#FF4500",
         attachOnly: cfgAttachOnly,
         headless: true,
-        defaultProfile: "openclaw",
+        defaultProfile: "bobolt",
         profiles: {
-          openclaw: { cdpPort: testPort + 1, color: "#FF4500" },
+          bobolt: { cdpPort: testPort + 1, color: "#FF4500" },
         },
       },
     }),
@@ -107,20 +107,20 @@ const launchCalls = vi.hoisted(() => [] as Array<{ port: number }>);
 vi.mock("./chrome.js", () => ({
   isChromeCdpReady: vi.fn(async () => reachable),
   isChromeReachable: vi.fn(async () => reachable),
-  launchOpenClawChrome: vi.fn(async (_resolved: unknown, profile: { cdpPort: number }) => {
+  launchBoboltChrome: vi.fn(async (_resolved: unknown, profile: { cdpPort: number }) => {
     launchCalls.push({ port: profile.cdpPort });
     reachable = true;
     return {
       pid: 123,
       exe: { kind: "chrome", path: "/fake/chrome" },
-      userDataDir: "/tmp/openclaw",
+      userDataDir: "/tmp/bobolt",
       cdpPort: profile.cdpPort,
       startedAt: Date.now(),
       proc,
     };
   }),
-  resolveOpenClawUserDataDir: vi.fn(() => "/tmp/openclaw"),
-  stopOpenClawChrome: vi.fn(async () => {
+  resolveBoboltUserDataDir: vi.fn(() => "/tmp/bobolt"),
+  stopBoboltChrome: vi.fn(async () => {
     reachable = false;
   }),
 }));
@@ -393,8 +393,8 @@ describe("backward compatibility (profile parameter)", () => {
       profile?: string;
     };
     expect(status.running).toBe(false);
-    // Should use default profile (openclaw)
-    expect(status.profile).toBe("openclaw");
+    // Should use default profile (bobolt)
+    expect(status.profile).toBe("bobolt");
   });
 
   it("POST /start without profile uses default profile", async () => {
@@ -407,7 +407,7 @@ describe("backward compatibility (profile parameter)", () => {
       profile?: string;
     };
     expect(result.ok).toBe(true);
-    expect(result.profile).toBe("openclaw");
+    expect(result.profile).toBe("bobolt");
   });
 
   it("POST /stop without profile uses default profile", async () => {
@@ -422,7 +422,7 @@ describe("backward compatibility (profile parameter)", () => {
       profile?: string;
     };
     expect(result.ok).toBe(true);
-    expect(result.profile).toBe("openclaw");
+    expect(result.profile).toBe("bobolt");
   });
 
   it("GET /tabs without profile uses default profile", async () => {
@@ -464,18 +464,18 @@ describe("backward compatibility (profile parameter)", () => {
       profiles: Array<{ name: string }>;
     };
     expect(Array.isArray(result.profiles)).toBe(true);
-    // Should at least have the default openclaw profile
-    expect(result.profiles.some((p) => p.name === "openclaw")).toBe(true);
+    // Should at least have the default bobolt profile
+    expect(result.profiles.some((p) => p.name === "bobolt")).toBe(true);
   });
 
-  it("GET /tabs?profile=openclaw returns tabs for specified profile", async () => {
+  it("GET /tabs?profile=bobolt returns tabs for specified profile", async () => {
     const { startBrowserControlServerFromConfig } = await import("./server.js");
     await startBrowserControlServerFromConfig();
     const base = `http://127.0.0.1:${testPort}`;
 
     await realFetch(`${base}/start`, { method: "POST" });
 
-    const result = (await realFetch(`${base}/tabs?profile=openclaw`).then((r) => r.json())) as {
+    const result = (await realFetch(`${base}/tabs?profile=bobolt`).then((r) => r.json())) as {
       running: boolean;
       tabs: unknown[];
     };
@@ -483,14 +483,14 @@ describe("backward compatibility (profile parameter)", () => {
     expect(Array.isArray(result.tabs)).toBe(true);
   });
 
-  it("POST /tabs/open?profile=openclaw opens tab in specified profile", async () => {
+  it("POST /tabs/open?profile=bobolt opens tab in specified profile", async () => {
     const { startBrowserControlServerFromConfig } = await import("./server.js");
     await startBrowserControlServerFromConfig();
     const base = `http://127.0.0.1:${testPort}`;
 
     await realFetch(`${base}/start`, { method: "POST" });
 
-    const result = (await realFetch(`${base}/tabs/open?profile=openclaw`, {
+    const result = (await realFetch(`${base}/tabs/open?profile=bobolt`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: "https://example.com" }),

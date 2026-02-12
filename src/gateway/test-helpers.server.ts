@@ -85,10 +85,10 @@ async function setupGatewayTestHome() {
   previousSkipGmailWatcher = process.env.OPENCLAW_SKIP_GMAIL_WATCHER;
   previousSkipCanvasHost = process.env.OPENCLAW_SKIP_CANVAS_HOST;
   previousBundledPluginsDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
-  tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gateway-home-"));
+  tempHome = await fs.mkdtemp(path.join(os.tmpdir(), "bobolt-gateway-home-"));
   process.env.HOME = tempHome;
   process.env.USERPROFILE = tempHome;
-  process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".openclaw");
+  process.env.OPENCLAW_STATE_DIR = path.join(tempHome, ".bobolt");
   delete process.env.OPENCLAW_CONFIG_PATH;
 }
 
@@ -97,8 +97,8 @@ function applyGatewaySkipEnv() {
   process.env.OPENCLAW_SKIP_GMAIL_WATCHER = "1";
   process.env.OPENCLAW_SKIP_CANVAS_HOST = "1";
   process.env.OPENCLAW_BUNDLED_PLUGINS_DIR = tempHome
-    ? path.join(tempHome, "openclaw-test-no-bundled-extensions")
-    : "openclaw-test-no-bundled-extensions";
+    ? path.join(tempHome, "bobolt-test-no-bundled-extensions")
+    : "bobolt-test-no-bundled-extensions";
 }
 
 async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
@@ -110,8 +110,8 @@ async function resetGatewayTestState(options: { uniqueConfigRoot: boolean }) {
   }
   applyGatewaySkipEnv();
   tempConfigRoot = options.uniqueConfigRoot
-    ? await fs.mkdtemp(path.join(tempHome, "openclaw-test-"))
-    : path.join(tempHome, ".openclaw-test");
+    ? await fs.mkdtemp(path.join(tempHome, "bobolt-test-"))
+    : path.join(tempHome, ".bobolt-test");
   setTestConfigRoot(tempConfigRoot);
   sessionStoreSaveDelayMs.value = 0;
   testTailnetIPv4.value = undefined;

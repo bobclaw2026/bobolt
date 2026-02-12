@@ -1,5 +1,5 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
-import { emptyPluginConfigSchema } from "openclaw/plugin-sdk";
+import type { BoboltPluginApi } from "bobolt/plugin-sdk";
+import { emptyPluginConfigSchema } from "bobolt/plugin-sdk";
 import { zaloDock, zaloPlugin } from "./src/channel.js";
 import { handleZaloWebhookRequest } from "./src/monitor.js";
 import { setZaloRuntime } from "./src/runtime.js";
@@ -9,7 +9,7 @@ const plugin = {
   name: "Zalo",
   description: "Zalo channel plugin (Bot API)",
   configSchema: emptyPluginConfigSchema(),
-  register(api: OpenClawPluginApi) {
+  register(api: BoboltPluginApi) {
     setZaloRuntime(api.runtime);
     api.registerChannel({ plugin: zaloPlugin, dock: zaloDock });
     api.registerHttpHandler(handleZaloWebhookRequest);

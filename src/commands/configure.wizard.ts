@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { BoboltConfig } from "../config/config.js";
 import type { RuntimeEnv } from "../runtime.js";
 import type {
   ChannelsWizardMode,
@@ -79,7 +79,7 @@ async function promptChannelMode(runtime: RuntimeEnv): Promise<ChannelsWizardMod
         {
           value: "remove",
           label: "Remove channel config",
-          hint: "Delete channel tokens/settings from openclaw.json",
+          hint: "Delete channel tokens/settings from bobolt.json",
         },
       ],
       initialValue: "configure",
@@ -89,9 +89,9 @@ async function promptChannelMode(runtime: RuntimeEnv): Promise<ChannelsWizardMod
 }
 
 async function promptWebToolsConfig(
-  nextConfig: OpenClawConfig,
+  nextConfig: BoboltConfig,
   runtime: RuntimeEnv,
-): Promise<OpenClawConfig> {
+): Promise<BoboltConfig> {
   const existingSearch = nextConfig.tools?.web?.search;
   const existingFetch = nextConfig.tools?.web?.fetch;
   const hasSearchKey = Boolean(existingSearch?.apiKey);
@@ -100,7 +100,7 @@ async function promptWebToolsConfig(
     [
       "Web search lets your agent look things up online using the `web_search` tool.",
       "It requires a Brave Search API key (you can store it in the config or set BRAVE_API_KEY in the Gateway environment).",
-      "Docs: https://docs.openclaw.ai/tools/web",
+      "Docs: https://docs.bobolt.ai/tools/web",
     ].join("\n"),
     "Web search",
   );
@@ -136,7 +136,7 @@ async function promptWebToolsConfig(
         [
           "No key stored yet, so web_search will stay unavailable.",
           "Store a key here or set BRAVE_API_KEY in the Gateway environment.",
-          "Docs: https://docs.openclaw.ai/tools/web",
+          "Docs: https://docs.bobolt.ai/tools/web",
         ].join("\n"),
         "Web search",
       );
@@ -175,11 +175,11 @@ export async function runConfigureWizard(
 ) {
   try {
     printWizardHeader(runtime);
-    intro(opts.command === "update" ? "OpenClaw update wizard" : "OpenClaw configure");
+    intro(opts.command === "update" ? "Bobolt update wizard" : "Bobolt configure");
     const prompter = createClackPrompter();
 
     const snapshot = await readConfigFileSnapshot();
-    const baseConfig: OpenClawConfig = snapshot.valid ? snapshot.config : {};
+    const baseConfig: BoboltConfig = snapshot.valid ? snapshot.config : {};
 
     if (snapshot.exists) {
       const title = snapshot.valid ? "Existing config detected" : "Invalid config";
@@ -189,14 +189,14 @@ export async function runConfigureWizard(
           [
             ...snapshot.issues.map((iss) => `- ${iss.path}: ${iss.message}`),
             "",
-            "Docs: https://docs.openclaw.ai/gateway/configuration",
+            "Docs: https://docs.bobolt.ai/gateway/configuration",
           ].join("\n"),
           "Config issues",
         );
       }
       if (!snapshot.valid) {
         outro(
-          `Config invalid. Run \`${formatCliCommand("openclaw doctor")}\` to repair it, then re-run configure.`,
+          `Config invalid. Run \`${formatCliCommand("bobolt doctor")}\` to repair it, then re-run configure.`,
         );
         runtime.exit(1);
         return;
@@ -393,8 +393,8 @@ export async function runConfigureWizard(
           note(
             [
               "Docs:",
-              "https://docs.openclaw.ai/gateway/health",
-              "https://docs.openclaw.ai/gateway/troubleshooting",
+              "https://docs.bobolt.ai/gateway/health",
+              "https://docs.bobolt.ai/gateway/troubleshooting",
             ].join("\n"),
             "Health check help",
           );
@@ -520,8 +520,8 @@ export async function runConfigureWizard(
             note(
               [
                 "Docs:",
-                "https://docs.openclaw.ai/gateway/health",
-                "https://docs.openclaw.ai/gateway/troubleshooting",
+                "https://docs.bobolt.ai/gateway/health",
+                "https://docs.bobolt.ai/gateway/troubleshooting",
               ].join("\n"),
               "Health check help",
             );
@@ -579,7 +579,7 @@ export async function runConfigureWizard(
         `Web UI: ${links.httpUrl}`,
         `Gateway WS: ${links.wsUrl}`,
         gatewayStatusLine,
-        "Docs: https://docs.openclaw.ai/web/control-ui",
+        "Docs: https://docs.bobolt.ai/web/control-ui",
       ].join("\n"),
       "Control UI",
     );
